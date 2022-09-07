@@ -1,0 +1,29 @@
+.MoviesCardList {
+	background-color: #222222;
+	padding: 70px 0;
+	display: flex;
+	justify-content: center;
+}
+
+.MoviesCardList__container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(300px, 1fr));
+	column-gap: 24px;
+	row-gap: 37px;
+}
+
+@media screen and (max-width: 768px) {
+	.MoviesCardList__container {
+		gap: 30px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.MoviesCardList__container {
+		gap: 14px;
+	}
+
+	.MoviesCardList {
+		padding: 40px 0;
+	}
+}

@@ -1,0 +1,140 @@
+.Navigation {
+	flex: 1 1 auto;
+}
+
+.Navigation__register {
+	color: white;
+	text-decoration: none;
+	margin-right: 30px;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px;
+}
+
+.Navigation__entry {
+	color: black;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px;
+	padding: 8px 20px;
+	background-color: #3DDC84;
+	border-radius: 3px;
+}
+
+.Navigation__films {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	gap: 16px;
+}
+
+.Navigation__link {
+	text-decoration: none;
+	color: white;
+	font-weight: 400;
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.Navigation__link_active {
+	font-weight: 500;
+}
+
+.Navigation__account {
+	background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	display: flex;
+	align-items: center;
+	color: #FFFFFF;
+	padding: 7px 11px 7px 30px;
+	border: 2px solid rgba(170, 170, 170, 0.2);
+	border-radius: 50px;
+	position: relative;
+	text-decoration: none;
+}
+
+.Navigation__account::before {
+	content: '';
+	position: absolute;
+	background-image: url('../../images/Navigation/acc.svg');
+	background-repeat: no-repeat;
+	width: 12px;
+	height: 14px;
+	left: 11px;
+}
+
+.Navigation__authorized {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-sizing: border-box;
+	z-index: 2;
+}
+
+.Navigation__item_main {
+	display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+	.Navigation__authorized {
+		width: calc(520 / 768 * 100%);
+		position: absolute;
+		height: 100vh;
+		flex-direction: column;
+		right: -100%;
+		top: 0;
+		padding: 159px 0 90px;
+		background-color: #202020;
+		transition: right 0.3s ease 0s;
+	}
+
+	.menu-open .Navigation__authorized {
+		right: 0;
+	}
+
+	.Navigation__films {
+		flex-direction: column;
+		align-items: center;
+		gap: 28px;
+	}
+	
+	.Navigation {
+		flex: none;
+	}
+	
+	.Navigation__item_main {
+		display: block;
+	}
+
+	.Navigation__link {
+		font-size: 18px;
+		line-height: 22px;
+		font-weight: 500;
+		position: relative;
+	}
+
+	.Navigation__link_active::after {
+		content: '';
+		position: absolute;
+		width: 100%;
+		bottom: -4px;
+		left: 0;
+		height: 2px;
+		background-color: white;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.Navigation__authorized {
+		width: 100vw;
+		position: absolute;
+		padding: 144px 0 46px;
+	}
+}
