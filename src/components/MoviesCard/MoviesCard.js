@@ -11,7 +11,7 @@ function MoviesCard() {
 				<div className='MoviesCard__content'>
 					<div className='MoviesCard__top'>
 						<h2 className='MoviesCard__title'>33 слова о дизайне</h2>
-						<button className='MoviesCard__like'></button>
+						<button type='button' className='MoviesCard__like'></button>
 					</div>
 					<p className='MoviesCard__duration'>1ч 47м</p>
 				</div>

@@ -5,7 +5,7 @@
 	max-width: 396px;
 	margin: 0 auto;
 	box-sizing: border-box;
-	padding: 144px 0 70px;
+	padding: 70px 0;
 }
 
 .Form__title {
@@ -63,8 +63,7 @@
 .Form__submit-container {
 	display: flex;
     flex: 1 1 auto;
-    flex-direction: column;
-	justify-content: end;
+    flex-direction: column-reverse;
 }
 
 .Form__label {
@@ -75,9 +74,19 @@
 	margin-bottom: 0;
 }
 
+.Form__input:focus {
+	border-bottom: 1px solid #FF6838;
+  }
+
+@media screen and (max-width: 768px) {
+	.Form {
+		padding: 232px 30px;
+	}
+}
+
 @media screen and (max-width: 480px) {
 	.Form {
-		padding: 70px 30px;
+		padding: 56px 30px 30px;
 	}
 
 	.Form__title {

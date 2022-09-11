@@ -66,8 +66,9 @@
 	border: none;
 	background-image: url('../../images/SearchForm/button.svg');
 	background-repeat: no-repeat;
-	background-position: center;
+	background-position: 14px;
 	position: relative;
+	transition: opacity 0.3s ease 0s;
 }
 
 .SearchForm__button::after {
@@ -78,6 +79,10 @@
 	position: absolute;
 	right: -19px;
 	top: 0;
+}
+
+.SearchForm__button:hover {
+	opacity: 0.8;
 }
 
 

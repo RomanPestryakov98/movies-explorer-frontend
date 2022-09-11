@@ -22,8 +22,6 @@
 }
 
 .Portfolio__item {
-	display: flex;
-	justify-content: space-between;
 	margin-bottom: 40px;
 	position: relative;
 	transition: opacity 0.3s ease 0s;
@@ -52,6 +50,13 @@
 	letter-spacing: -0.04em;
 	color: white;
 	text-decoration: none;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.Portfolio__link-text {
+	margin: 0;
 }
 
 .Portfolio__item:hover {

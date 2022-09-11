@@ -30,8 +30,8 @@ function Profile() {
 					/>
 				</label>
 			</div>
-			<button className='Profile__redaction'>Редактировать</button>
-			<button className='Profile__exit'>Выйти из аккаунта</button>
+			<button type='button' className='Profile__redaction'>Редактировать</button>
+			<button type='button' className='Profile__exit'>Выйти из аккаунта</button>
 		</section>
 	)
 }

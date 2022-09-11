@@ -30,17 +30,14 @@ function App() {
 			<Switch>
 				<Route exact path="/">
 					<Main />
-					<Footer />
 				</Route>
 
 				<Route path="/movies">
 					<Movies />
-					<Footer />
 				</Route>
 
 				<Route path="/saved-movies">
 					<SavedMovies />
-					<Footer />
 				</Route>
 
 				<Route path="/signup">
@@ -55,6 +52,7 @@ function App() {
 					<Profile />
 				</Route>
 			</Switch>
+			<Footer />
 		</div>
 	);
 }
