@@ -1,0 +1,27 @@
+.Header {
+	position: absolute;
+    width: 100vw;
+	display: flex;
+	justify-content: center;
+}
+
+.Header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 70px;
+    min-height: 74px;
+    background-color: transparent;
+    gap: 44px;
+    max-width: 1280px;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+@media screen and (max-width: 768px) {
+	.Header__container {
+		padding: 0 30px;
+	}
+}
+

@@ -1,0 +1,72 @@
+@import url('../src/vendor/normalize.css');
+@import url('./fonts/Inter/inter-font.css');
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  overflow: overlay;
+  background-color: #202020;
+  min-height: 100vh;
+}
+
+.container {
+	max-width: 1280px;
+	width: 100%;
+	padding: 0 70px;
+	box-sizing: border-box;
+}
+
+.container-movies-card {
+	max-width: 1280px;
+	width: 100%;
+	padding: 0 70px;
+	box-sizing: border-box;
+}
+
+.page {
+	overflow: hidden;
+	position: relative;
+}
+
+.lock {
+	overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+	.container {
+		max-width: 768px;
+		width: 100%;
+		padding: 0 50px;
+	}
+
+	.container-movies-card {
+		padding: 0 30px;
+	}
+
+	.menu-open.page::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100vh;
+		background: #000000;
+		opacity: 0.3;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.container {
+		padding: 0 18px;
+	}
+
+	.container-movies-card {
+		padding: 0 10px;
+	}
+}

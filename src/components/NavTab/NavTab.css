@@ -1,0 +1,39 @@
+.navtab {
+	background-color: black;
+	min-height: 66px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.navtab__list {
+	margin: 0;
+	list-style-type: none;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+}
+
+.navtab__item {
+	margin-right: 40px;
+}
+
+.navtab__item:last-child {
+	margin-right: 0;
+}
+
+.navtab__link {
+	color: white;
+	text-decoration: none;
+	position: relative;
+}
+
+.navtab__link::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left: 0;
+	bottom: 0;
+	background-color: white;
+}
