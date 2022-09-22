@@ -3,12 +3,18 @@
 	box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
 	border-radius: 6px;
 	overflow: hidden;
+	transition: box-shadow 0.3s ease 0s;
 }
 
 .MoviesCard__image-container {
 	width: 100%;
 	position: relative;
 	padding-bottom: 55.77%;
+	display: block;
+}
+
+.MoviesCard:hover {
+	box-shadow: 0px 4px 30px rgba(0, 0, 0, 35%);
 }
 
 .MoviesCard__image {
@@ -17,7 +23,7 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	object-fit: contain;
+	object-fit: cover;
 }
 
 .MoviesCard__like {
@@ -29,6 +35,21 @@
 	height: 12px;
 	margin-right: 8px;
     margin-top: 4px;
+	cursor: pointer;
+}
+
+.MoviesCard__delete-like {
+	border: none;
+	background-color: transparent;
+	background-image: url('../../images/MoviesCard/delete-movie.svg');
+	background-repeat: no-repeat;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	background-position: center center;
+	opacity: 0;
+	transition: opacity 0.3s ease 0s;
 }
 
 .MoviesCard__like_liked {
@@ -44,20 +65,25 @@
 }
 
 .MoviesCard__content {
-	padding: 16px;
+	padding: 9px 16px;
 }
 
 .MoviesCard__top {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .MoviesCard__duration {
-	margin: 17px 0 0 0;
+	margin-top: 12px 0 0 0;
 	font-weight: 400;
 	font-size: 11px;
 	line-height: 13px;
 	color: #8B8B8B;
+}
+
+.MoviesCard:hover .MoviesCard__delete-like {
+	opacity: 1;
 }
 
 @media screen and (max-width: 768px) {

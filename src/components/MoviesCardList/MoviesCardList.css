@@ -12,8 +12,37 @@
 	row-gap: 37px;
 }
 
+.MoviesCardList__more {
+	background-color: rgba(47, 47, 47, 1);
+	border: none;
+	cursor: pointer;
+	width: 100%;
+	font-weight: 500;
+	min-height: 36px;
+	font-size: 12px;
+	line-height: 15px;
+	color: white;
+	margin-top: 50px;
+	transition: background-color 0.3s ease 0s;
+}
+
+.MoviesCardList__error {
+	color: #EE3465;
+	text-align: center;
+}
+
+.MoviesCardList__more:hover {
+	background-color: rgba(47, 47, 47, 0.4);
+}
+
+.MoviesCardList__not-found {
+	color: white;
+	text-align: center;
+	font-size: 24px;
+}
+
 @media screen and (max-width: 768px) {
-	.MoviesCardList__container {
+	.MoviesCardList__container {	
 		gap: 30px;
 	}
 }

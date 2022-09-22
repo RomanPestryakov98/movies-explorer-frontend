@@ -2,6 +2,10 @@
 	flex: 1 1 auto;
 }
 
+.Navigation_non-authorized {
+	flex: none;
+}
+
 .Navigation__register {
 	color: white;
 	text-decoration: none;

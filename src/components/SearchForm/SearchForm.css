@@ -85,6 +85,13 @@
 	opacity: 0.8;
 }
 
+.SearchForm__input-error {
+	position: absolute;
+    left: 10px;
+    bottom: -40px;
+	color: #EE3465;
+}
+
 
 @media screen and (max-width: 768px) {
 	.SearchForm__wrap {
