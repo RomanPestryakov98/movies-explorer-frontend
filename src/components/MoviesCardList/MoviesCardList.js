@@ -31,7 +31,7 @@ function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handle
 						<Preloader />
 						:
 						filterScreen(movies, sizeScreen, counterMovies).map((movie) => (
-							<MoviesCard
+							< MoviesCard
 								handleLike={handleLike}
 								movies={movies}
 								data={movie}

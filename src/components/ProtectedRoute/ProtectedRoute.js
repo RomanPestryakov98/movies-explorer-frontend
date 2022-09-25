@@ -10,7 +10,7 @@ function ProtectedRoute({ component: Component, ...props }) {
 						<Component {...props} />
 					</>
 
-					: <Redirect exact to="./" />
+					: <Redirect to="/" />
 			}
 		</Route>
 	)

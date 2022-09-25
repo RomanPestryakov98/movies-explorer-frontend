@@ -21,7 +21,12 @@ export function filter(movies, data) {
 }
 
 function filterWord(movieName, word) {
-	return movieName.startsWith(word);
+	if (movieName.indexOf(word) !== -1) {
+		return true
+	}
+	else {
+		return false;
+	}
 }
 
 export function setDataLocalStorage(data, movies) {
@@ -44,6 +49,7 @@ export function handleLikeLocalStorage(movie) {
 		})
 	}
 }
+
 
 export function compareSavedWithMovies(newMovies, savedMovies) {
 	if (savedMovies.length > 0) {

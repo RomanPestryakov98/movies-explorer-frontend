@@ -3,46 +3,39 @@ import MainApi from '../../utils/MainApi';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import React, { useEffect, useState } from 'react';
 
-function SavedMovies({ deleteMovieFromSavedMovies, handleCheckbox, data, onSubmit }) {
-	const [moviesSaved, setMoviesSaved] = useState([]);
+function SavedMovies({ deleteMovieFromSavedMovies, setSavedMovies, savedMovies, onSubmit }) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		MainApi.getMovies()
-			.then(res => {
-				if (data.checkbox) {
-					setMoviesSaved(() => res.filter(c => c.duration <= 40));
-				}
-				else {
-					setMoviesSaved(res);
-				}
-			})
-	}, [data])
+		if (!localStorage.getItem('dataSaved')) {
+			MainApi.getMovies()
+				.then(res => {
+					setSavedMovies(res);
+					localStorage.setItem('dataSaved', JSON.stringify(res))
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		}
+		// eslint-disable-next-line
+	}, [])
 
 	function handleIsLoading(state) {
 		setIsLoading(state)
 	}
 
-
 	return (
 		<>
 			<SearchForm
 				name='saved-movies'
-				valueSearch={JSON.parse(localStorage.getItem('data'))?.movie}
 				onSetLoading={handleIsLoading}
-				setMoviesSaved={setMoviesSaved}
-				data={data}
-				movies={moviesSaved}
 				onSubmit={onSubmit}
-				handleCheckbox={handleCheckbox}
 			/>
 			<MoviesCardList
 				name='saved-movies'
 				isLoading={isLoading}
-				movies={moviesSaved}
-				data={data}
+				movies={savedMovies}
 				deleteMovieFromSavedMovies={deleteMovieFromSavedMovies}
-				setMoviesSaved={setMoviesSaved}
 			/>
 		</>
 	)

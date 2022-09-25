@@ -10,7 +10,6 @@ body {
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
-  overflow: overlay;
   background-color: #202020;
   min-height: 100vh;
 }

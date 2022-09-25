@@ -6,14 +6,16 @@ import React, { useState } from 'react';
 
 function SearchForm({ name, onSubmit, handleCheckbox, movies, data }) {
 	const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'onSubmit' });
-	const [valueSearch, setValueSearch] = useState(JSON.parse(localStorage.getItem('data')) ? JSON.parse(localStorage.getItem('data'))?.searchWord : '');
+	const [valueSearch, setValueSearch] = useState(JSON.parse(localStorage.getItem('data')) && name === 'movies' ? JSON.parse(localStorage.getItem('data'))?.searchWord : '');
 
 	function handleSearch(e) {
 		setValueSearch(e.target.value);
 	}
 
 	function onHandleSubmit(data) {
-		onSubmit(data, name)
+		if (name === 'movies') {
+			onSubmit(data)
+		}
 	}
 
 	return (
@@ -33,7 +35,7 @@ function SearchForm({ name, onSubmit, handleCheckbox, movies, data }) {
 							</div>
 							<button type='submit' className='SearchForm__button'></button>
 						</div>
-						<FilterCheckbox register={register} handleCheckbox={handleCheckbox} movies={movies} data={data} />
+						<FilterCheckbox register={register} handleCheckbox={handleCheckbox} movies={movies} data={data} name={name} />
 					</form>
 				</div>
 			</div>

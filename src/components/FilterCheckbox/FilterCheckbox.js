@@ -1,12 +1,14 @@
 import './FilterCheckbox.css';
 import React, { useState } from 'react';
 
-function FilterCheckbox({ register, handleCheckbox, data }) {
-	const [isChecked, setIsChecked] = useState(data.movies ? data.checkbox : false);
+function FilterCheckbox({ register, handleCheckbox, data, name }) {
+	const [isChecked, setIsChecked] = useState(data?.movies ? data.checkbox : false);
 
 	function handleChange() {
-		setIsChecked(!isChecked);
-		handleCheckbox(!isChecked);
+		if (name === 'movies') {
+			setIsChecked(!isChecked);
+			handleCheckbox(!isChecked, name);
+		}
 	}
 
 	return (

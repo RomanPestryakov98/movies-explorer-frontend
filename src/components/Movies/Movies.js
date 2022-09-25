@@ -17,7 +17,7 @@ function Movies({ isLoading, onSubmit, errorMovies, handleLike, handleCheckbox, 
 	return (
 		<>
 			<SearchForm name='movies' onSubmit={onSubmit} setMovies={setMovies} handleCheckbox={handleCheckbox} data={data} />
-			<MoviesCardList handleLike={handleLike} name='movies' isLoading={isLoading} movies={movies} errorMovies={errorMovies} setMovies={setMovies} notFound={notFound} />
+			<MoviesCardList handleLike={handleLike} name='movies' isLoading={isLoading} movies={movies} errorMovies={errorMovies} notFound={notFound} />
 		</>
 	)
 }

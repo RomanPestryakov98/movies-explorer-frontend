@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -21,51 +21,48 @@ import { setDataLocalStorage, handleLikeLocalStorage, compareSavedWithMovies } f
 function App() {
 	const [currentUser, setCurrentUser] = useState({});
 	const [isBuregerOpen, setIsBuregerOpen] = useState(false);
-	const [loggedIn, setLoggedIn] = useState(false);
+	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('auth') ? true : false);
 	const [errorReg, setErrorReg] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorMovies, setErrorMovies] = useState(false);
 	const [notFound, setNotFound] = useState(false);
 	const [messageUpdateProfile, setMessageUpdateProfile] = useState(false);
 	const history = useHistory();
-	const [savedMovies, setSavedMovies] = useState([]);
+	const [savedMovies, setSavedMovies] = useState(localStorage.getItem('dataSaved') ? JSON.parse(localStorage.getItem('dataSaved')) : []);
 	const [data, setData] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
 
 	useEffect(() => {
 		tokenCheck();
 	}, [loggedIn])
 
-	useEffect(() => {
-		MainApi.getMovies()
-			.then(res => {
-				setSavedMovies(res);
-			})
-			.catch(err => {
-				console.log(err)
-			})
-
-	}, [loggedIn])
-
 	function tokenCheck() {
-		auth.tokenCheck()
-			.then(res => {
-				setCurrentUser({ name: res.name, email: res.email });
-				setLoggedIn(true);
-				history.push('/');
-			})
-			.catch(err => {
-				console.log(err)
-			})
+		if (localStorage.getItem('auth')) {
+			auth.tokenCheck()
+				.then(res => {
+					setCurrentUser({ name: res.name, email: res.email });
+					setLoggedIn(true);
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		}
 	}
 
-	function handleCheckbox(isCheck) {
-		setDataLocalStorage({ movie: data.searchWord, checkbox: isCheck }, JSON.parse(localStorage.getItem('data'))?.movies || []);
-		setData(JSON.parse(localStorage.getItem('data')))
-	}
-
-	function onSubmit(data, name) {
-		setNotFound(false);
+	function handleCheckbox(isCheck, name) {
 		if (name === 'movies') {
+			setDataLocalStorage({ movie: data.searchWord, checkbox: isCheck }, JSON.parse(localStorage.getItem('data'))?.movies || []);
+			setData(JSON.parse(localStorage.getItem('data')))
+		}
+	}
+
+	function onSubmit(data) {
+
+		if (localStorage.getItem('data')) {
+			setDataLocalStorage(data, JSON.parse(localStorage.getItem('data')).movies);
+			setData(JSON.parse(localStorage.getItem('data')));
+		}
+		else {
+			setNotFound(false);
 			setIsLoading(true);
 			setErrorMovies(false);
 			MovieApi.getDataMovies()
@@ -82,10 +79,6 @@ function App() {
 					setNotFound(true);
 				})
 		}
-		else {
-			setDataLocalStorage(data, JSON.parse(localStorage.getItem('data')) ? JSON.parse(localStorage.getItem('data')).movies : []);
-			setData(JSON.parse(localStorage.getItem('data')));
-		}
 	}
 
 	function handleLike(movie) {
@@ -95,9 +88,13 @@ function App() {
 				.then((res) => {
 					setDataLocalStorage({ movie: data.searchWord, checkbox: data.checkbox }, handleLikeLocalStorage(res));
 					setData(JSON.parse(localStorage.getItem('data')));
+					const newMoviesSaved = Array.from(savedMovies);
+					newMoviesSaved.push(res)
+					setSavedMovies(newMoviesSaved);
+					localStorage.setItem('dataSaved', JSON.stringify(newMoviesSaved));
 				})
 				.catch(err => {
-					console.log(err)
+					console.log(err);
 				})
 		}
 		else {
@@ -105,6 +102,8 @@ function App() {
 				.then((res) => {
 					setDataLocalStorage({ movie: data.searchWord, checkbox: data.checkbox }, handleLikeLocalStorage(res));
 					setData(JSON.parse(localStorage.getItem('data')));
+					setSavedMovies((state) => state.filter(c => c.nameRU !== movie.nameRU));
+					localStorage.setItem('dataSaved', JSON.stringify(savedMovies.filter(c => c.nameRU !== movie.nameRU)));
 				})
 				.catch(err => {
 					console.log(err)
@@ -117,15 +116,22 @@ function App() {
 			.then((res) => {
 				setDataLocalStorage({ movie: data.searchWord, checkbox: data.checkbox }, handleLikeLocalStorage(res));
 				setData(JSON.parse(localStorage.getItem('data')));
+				setSavedMovies((state) => state.filter(c => c.nameRU !== movie.nameRU));
+				localStorage.setItem('dataSaved', JSON.stringify(savedMovies.filter(c => c.nameRu !== movie.nameRU)));
 			})
 	}
 
 	function signout() {
 		MainApi.signout()
-			.then((res) => {
+			.then(() => {
 				setLoggedIn(false);
 				localStorage.removeItem('data');
+				localStorage.removeItem('dataSaved');
+				localStorage.removeItem('auth');
 				history.push('/');
+			})
+			.catch(err => {
+				console.log(err)
 			})
 	}
 
@@ -159,6 +165,7 @@ function App() {
 					setLoggedIn(true);
 					history.push('/movies')
 					setErrorReg(false);
+					localStorage.setItem('auth', 'ok');
 				}
 			})
 			.catch(() => {
@@ -198,7 +205,6 @@ function App() {
 						onSubmit={onSubmit}
 						errorMovies={errorMovies}
 						notFound={notFound}
-						savedMovies={savedMovies}
 						handleLike={handleLike}
 						handleCheckbox={handleCheckbox}
 						component={Movies}
@@ -208,11 +214,10 @@ function App() {
 						path="/saved-movies"
 						loggedIn={loggedIn}
 						deleteMovieFromSavedMovies={deleteMovieFromSavedMovies}
+						savedMovies={savedMovies}
+						setSavedMovies={setSavedMovies}
 						component={SavedMovies}
 						onSubmit={onSubmit}
-						handleCheckbox={handleCheckbox}
-						savedMovies={savedMovies}
-						data={data}
 					/>
 
 					<ProtectedRoute
@@ -225,11 +230,21 @@ function App() {
 					/>
 
 					<Route path="/signup">
-						<Register errorReg={errorReg} onRegistration={registration} />
+						{loggedIn
+							?
+							<Redirect to='/movies' />
+							:
+							<Register errorReg={errorReg} onRegistration={registration} />
+						}
 					</Route>
 
 					<Route path="/signin">
-						<Login errorReg={errorReg} onLogin={login} />
+						{loggedIn
+							?
+							<Redirect to='/movies' />
+							:
+							<Login errorReg={errorReg} onLogin={login} />
+						}
 					</Route>
 
 					<Route path="*">
