@@ -27,6 +27,8 @@
 }
 
 .PageNotFound__button {
+	border: none;
+	background-color: transparent;
 	position: absolute;
 	bottom: 60px;
 	font-weight: 400;
@@ -36,6 +38,7 @@
 	color: #4285F4;
 	text-decoration: none;
 	display: flex;
+	cursor: pointer;
 }
 
 @media screen and (max-width: 480px) {

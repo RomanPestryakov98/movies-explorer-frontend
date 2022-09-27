@@ -8,7 +8,7 @@ class MainApi {
 		if (res.ok) {
 			return res.json();
 		}
-		return Promise.reject(`Ошибка тут: ${res.status}`);
+		return Promise.reject(res);
 	}
 
 	createMovie(movie) {

@@ -9,16 +9,19 @@ function Form({ onRegistration, onLogin, name, errorReg }) {
 
 	function onSubmit(data) {
 		if (name === 'register') {
-			onRegistration(data)
+			onRegistration(data);
+
 		}
 		if (name === 'login') {
-			onLogin(data)
+			onLogin(data);
 		}
 	}
 
 	return (
 		<div className='Form'>
-			<img src={logo} alt='logo' className='Form__logo'></img>
+			<Link className='Form__logo-link' to="/">
+				<img src={logo} alt='logo' className='Form__logo'></img>
+			</Link>
 			<h3 className='Form__title'>{name === 'register' ? 'Добро пожаловать!' : 'Рады видеть!'}</h3>
 			<form action="#" name={name} className="Form__form" noValidate onSubmit={handleSubmit(onSubmit)}>
 				{name === 'register' &&

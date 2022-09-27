@@ -125,6 +125,10 @@
 	margin-top: 10px;
 }
 
+.Form__logo-link {
+	text-align: left;
+}
+
 @media screen and (max-width: 768px) {
 	.Form {
 		padding: 232px 30px;
@@ -140,8 +144,8 @@
 		text-align: center;
 	}
 
-	.Form__logo {
-		margin: 0 auto;
+	.Form__logo-link {
+		text-align: center;
 	}
 
 }

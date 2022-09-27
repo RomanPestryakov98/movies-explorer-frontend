@@ -1,6 +1,6 @@
 import './MoviesCard.css';
 
-function MoviesCard({ data, name, handleLike, setMovies, deleteMovieFromSavedMovies }) {
+function MoviesCard({ data, name, handleLike, setMovies, deleteMovieFromSavedMovies, errorLike }) {
 	function setDuration(duration) {
 		const hours = Math.floor(duration / 60);
 		const minutes = duration % 60;

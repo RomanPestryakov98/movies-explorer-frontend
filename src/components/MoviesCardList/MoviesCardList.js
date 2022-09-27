@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { filterScreen } from '../../utils/utils';
 
 
-function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handleLike, deleteMovieFromSavedMovies, notFound }) {
+function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handleLike, deleteMovieFromSavedMovies, errorLike, data }) {
 	const [counterMovies, setCounterMovies] = useState(0);
 	const [sizeScreen, setSizeScreen] = useState(window.screen.width);
 
@@ -13,9 +13,10 @@ function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handle
 		function handleResize() {
 			setSizeScreen(window.screen.width);
 		}
-		window.addEventListener('resize', () => {
-			setTimeout(handleResize, 2000);
-		});
+		window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		}
 	})
 
 	function handleCounterMovies() {
@@ -26,7 +27,8 @@ function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handle
 		<section className='MoviesCardList'>
 			<div className='container-movies-card'>
 				<div className='MoviesCardList__container'>
-					{(movies.length === 0 && notFound) && <p className='MoviesCardList__not-found'>Ничего не найдено</p>}
+					{(data?.searchWord && movies.length === 0) && <p className='MoviesCardList__not-found'>Ничего не найдено</p>}
+					{errorLike && <span className='MoviesCard__error-like'>Ничего не найдено</span>}
 					{isLoading ?
 						<Preloader />
 						:
@@ -37,6 +39,7 @@ function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handle
 								data={movie}
 								name={name}
 								deleteMovieFromSavedMovies={deleteMovieFromSavedMovies}
+								errorLike={errorLike}
 								key={name === 'movies' ? movie.id : movie._id}
 							/>
 						))

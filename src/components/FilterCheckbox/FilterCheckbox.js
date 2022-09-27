@@ -5,10 +5,8 @@ function FilterCheckbox({ register, handleCheckbox, data, name }) {
 	const [isChecked, setIsChecked] = useState(data?.movies ? data.checkbox : false);
 
 	function handleChange() {
-		if (name === 'movies') {
-			setIsChecked(!isChecked);
-			handleCheckbox(!isChecked, name);
-		}
+		setIsChecked(!isChecked);
+		handleCheckbox(!isChecked, name, data);
 	}
 
 	return (

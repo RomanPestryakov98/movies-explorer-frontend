@@ -2,23 +2,25 @@ import SearchForm from '../SearchForm/SearchForm';
 import MainApi from '../../utils/MainApi';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import React, { useEffect, useState } from 'react';
+import { filter } from '../../utils/utils';
 
-function SavedMovies({ deleteMovieFromSavedMovies, setSavedMovies, savedMovies, onSubmit }) {
+function SavedMovies({ deleteMovieFromSavedMovies, setDataSavedMovies, dataSavedMovies, onSubmit, handleCheckbox, notFoundAfterSubmit }) {
 	const [isLoading, setIsLoading] = useState(false);
+	const [movies, setMovies] = useState(dataSavedMovies.movies ? dataSavedMovies.movies : []);
 
 	useEffect(() => {
-		if (!localStorage.getItem('dataSaved')) {
+		if (!dataSavedMovies.movies) {
 			MainApi.getMovies()
 				.then(res => {
-					setSavedMovies(res);
-					localStorage.setItem('dataSaved', JSON.stringify(res))
-				})
-				.catch(err => {
-					console.log(err)
+					localStorage.setItem('dataSaved', JSON.stringify({ searchWord: '', checkbox: false, movies: res }));
+					setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 				})
 		}
+		else {
+			setMovies(filter(dataSavedMovies.movies, dataSavedMovies))
+		}
 		// eslint-disable-next-line
-	}, [])
+	}, [dataSavedMovies])
 
 	function handleIsLoading(state) {
 		setIsLoading(state)
@@ -30,12 +32,16 @@ function SavedMovies({ deleteMovieFromSavedMovies, setSavedMovies, savedMovies, 
 				name='saved-movies'
 				onSetLoading={handleIsLoading}
 				onSubmit={onSubmit}
+				data={dataSavedMovies}
+				handleCheckbox={handleCheckbox}
 			/>
 			<MoviesCardList
 				name='saved-movies'
 				isLoading={isLoading}
-				movies={savedMovies}
+				movies={movies}
 				deleteMovieFromSavedMovies={deleteMovieFromSavedMovies}
+				notFoundAfterSubmit={notFoundAfterSubmit}
+				data={dataSavedMovies}
 			/>
 		</>
 	)

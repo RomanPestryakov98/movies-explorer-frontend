@@ -16,122 +16,142 @@ import { useHistory } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import MainApi from '../../utils/MainApi';
 import MovieApi from '../../utils/MovieApi';
-import { setDataLocalStorage, handleLikeLocalStorage, compareSavedWithMovies } from '../../utils/utils';
+import { handleLikeLocalStorage, compareSavedWithMovies } from '../../utils/utils';
 
 function App() {
 	const [currentUser, setCurrentUser] = useState({});
 	const [isBuregerOpen, setIsBuregerOpen] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('auth') ? true : false);
-	const [errorReg, setErrorReg] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [errorMovies, setErrorMovies] = useState(false);
-	const [notFound, setNotFound] = useState(false);
+	const [errorReg, setErrorReg] = useState(false);
 	const [messageUpdateProfile, setMessageUpdateProfile] = useState(false);
+	const [errorLike, setErrorLike] = useState(false);
 	const history = useHistory();
-	const [savedMovies, setSavedMovies] = useState(localStorage.getItem('dataSaved') ? JSON.parse(localStorage.getItem('dataSaved')) : []);
-	const [data, setData] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
+	const [dataSavedMovies, setDataSavedMovies] = useState(localStorage.getItem('dataSaved') ? JSON.parse(localStorage.getItem('dataSaved')) : {});
+	const [dataMovies, setDataMovies] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
 
 	useEffect(() => {
-		tokenCheck();
+		if (!loggedIn) {
+			tokenCheck();
+		}
+		// eslint-disable-next-line
 	}, [loggedIn])
 
+	function checkAuth(err) {
+		if (err.statusText === 'Unauthorized') {
+			setLoggedIn(false);
+			history.push('/')
+			console.log('Пользователь не авторизован')
+		}
+	}
+
 	function tokenCheck() {
-		if (localStorage.getItem('auth')) {
-			auth.tokenCheck()
-				.then(res => {
-					setCurrentUser({ name: res.name, email: res.email });
-					setLoggedIn(true);
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		}
+		auth.tokenCheck()
+			.then(res => {
+				setCurrentUser({ name: res.name, email: res.email });
+				setLoggedIn(true);
+			})
+			.catch(err => {
+				checkAuth(err);
+				setLoggedIn(false);
+			})
+
 	}
 
-	function handleCheckbox(isCheck, name) {
-		if (name === 'movies') {
-			setDataLocalStorage({ movie: data.searchWord, checkbox: isCheck }, JSON.parse(localStorage.getItem('data'))?.movies || []);
-			setData(JSON.parse(localStorage.getItem('data')))
-		}
-	}
-
-	function onSubmit(data) {
-
-		if (localStorage.getItem('data')) {
-			setDataLocalStorage(data, JSON.parse(localStorage.getItem('data')).movies);
-			setData(JSON.parse(localStorage.getItem('data')));
+	function handleCheckbox(isCheck, name, data) {
+		if (name === 'saved-movies') {
+			localStorage.setItem('dataSaved', JSON.stringify({ searchWord: data.searchWord, checkbox: isCheck, movies: data?.movies || [] }));
+			setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 		}
 		else {
-			setNotFound(false);
-			setIsLoading(true);
-			setErrorMovies(false);
-			MovieApi.getDataMovies()
-				.then(movies => {
-					setDataLocalStorage(data, compareSavedWithMovies(movies, savedMovies));
-					setData(JSON.parse(localStorage.getItem('data')));
-				})
-				.catch((err) => {
-					setErrorMovies(true);
-					console.log(err);
-				})
-				.finally(() => {
-					setIsLoading(false);
-					setNotFound(true);
-				})
+			localStorage.setItem('data', JSON.stringify({ searchWord: data.searchWord, checkbox: isCheck, movies: data?.movies || [] }));
+			setDataMovies(JSON.parse(localStorage.getItem('data')));
+		}
+	}
+
+	function onSubmit(data, name) {
+		if (name === 'movies') {
+			if (dataMovies.movies) {
+				localStorage.setItem('data', JSON.stringify({ searchWord: data.searchWord, checkbox: data.checkbox, movies: dataMovies.movies }));
+				setDataMovies(JSON.parse(localStorage.getItem('data')));
+			}
+			else {
+				setIsLoading(true);
+				MovieApi.getDataMovies()
+					.then(res => {
+						localStorage.setItem('data', JSON.stringify({
+							searchWord: data.searchWord, checkbox: data.checkbox, movies: compareSavedWithMovies(res, dataSavedMovies?.movies)
+						}))
+						setDataMovies(JSON.parse(localStorage.getItem('data')));
+					})
+					.catch(err => {
+						console.log(err);
+
+					})
+					.finally(() => {
+						setIsLoading(false);
+					})
+			}
+		}
+		else {
+			localStorage.setItem('dataSaved', JSON.stringify({ searchWord: data.searchWord, checkbox: data.checkbox, movies: dataSavedMovies?.movies || [] }));
+			setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 		}
 	}
 
 	function handleLike(movie) {
-		const isLiked = data.movies.some((c) => c.nameRU === movie.nameRU && !c.liked);
+		const isLiked = dataMovies.movies.some((c) => c.nameRU === movie.nameRU && !c.liked);
 		if (isLiked) {
 			MainApi.createMovie(movie)
-				.then((res) => {
-					setDataLocalStorage({ movie: data.searchWord, checkbox: data.checkbox }, handleLikeLocalStorage(res));
-					setData(JSON.parse(localStorage.getItem('data')));
-					const newMoviesSaved = Array.from(savedMovies);
-					newMoviesSaved.push(res)
-					setSavedMovies(newMoviesSaved);
-					localStorage.setItem('dataSaved', JSON.stringify(newMoviesSaved));
+				.then(res => {
+					localStorage.setItem('data', JSON.stringify({ searchWord: dataMovies.searchWord, checkbox: dataMovies.checkbox, movies: handleLikeLocalStorage(res) }));
+					setDataMovies(JSON.parse(localStorage.getItem('data')));
+
+					const newDataSavedMovies = Array.from(dataSavedMovies.movies);
+					newDataSavedMovies.push(res);
+					localStorage.setItem('dataSaved', JSON.stringify({ searchWord: dataSavedMovies.searchWord, checkbox: dataSavedMovies.checkbox, movies: newDataSavedMovies }));
+					setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 				})
 				.catch(err => {
-					console.log(err);
+					setErrorLike(true);
+					checkAuth(err);
+				})
+				.finally(() => {
+					setTimeout(() => setErrorLike(false), 2000);
 				})
 		}
 		else {
 			MainApi.deleteMovie(movie._id)
-				.then((res) => {
-					setDataLocalStorage({ movie: data.searchWord, checkbox: data.checkbox }, handleLikeLocalStorage(res));
-					setData(JSON.parse(localStorage.getItem('data')));
-					setSavedMovies((state) => state.filter(c => c.nameRU !== movie.nameRU));
-					localStorage.setItem('dataSaved', JSON.stringify(savedMovies.filter(c => c.nameRU !== movie.nameRU)));
+				.then(res => {
+					localStorage.setItem('data', JSON.stringify({ searchWord: dataMovies.searchWord, checkbox: dataMovies.checkbox, movies: handleLikeLocalStorage(res) }));
+					setDataMovies(JSON.parse(localStorage.getItem('data')));
+
+					const newDataSavedMovies = [...dataSavedMovies.movies].filter(c => c.nameRU !== res.nameRU)
+					localStorage.setItem('dataSaved', JSON.stringify({ searchWord: dataSavedMovies.searchWord, checkbox: dataSavedMovies.checkbox, movies: newDataSavedMovies }));
+					setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 				})
 				.catch(err => {
-					console.log(err)
+					checkAuth(err);
 				})
 		}
+
 	}
 
 	function deleteMovieFromSavedMovies(movie) {
 		MainApi.deleteMovie(movie._id)
-			.then((res) => {
-				setDataLocalStorage({ movie: data.searchWord, checkbox: data.checkbox }, handleLikeLocalStorage(res));
-				setData(JSON.parse(localStorage.getItem('data')));
-				setSavedMovies((state) => state.filter(c => c.nameRU !== movie.nameRU));
-				localStorage.setItem('dataSaved', JSON.stringify(savedMovies.filter(c => c.nameRu !== movie.nameRU)));
-			})
-	}
+			.then(res => {
+				if (localStorage.getItem('data')) {
+					localStorage.setItem('data', JSON.stringify({ searchWord: dataMovies.searchWord, checkbox: dataMovies.checkbox, movies: handleLikeLocalStorage(res) }));
+					setDataMovies(JSON.parse(localStorage.getItem('data')));
+				}
 
-	function signout() {
-		MainApi.signout()
-			.then(() => {
-				setLoggedIn(false);
-				localStorage.removeItem('data');
-				localStorage.removeItem('dataSaved');
-				localStorage.removeItem('auth');
-				history.push('/');
+				const newDataSavedMovies = [...dataSavedMovies.movies].filter(c => c.nameRU !== res.nameRU)
+				localStorage.setItem('dataSaved', JSON.stringify({ searchWord: dataSavedMovies.searchWord, checkbox: dataSavedMovies.checkbox, movies: newDataSavedMovies }));
+				setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 			})
 			.catch(err => {
-				console.log(err)
+				console.log(err);
+				checkAuth(err);
 			})
 	}
 
@@ -144,6 +164,19 @@ function App() {
 		}
 	}
 
+	function signout() {
+		MainApi.signout()
+			.then(() => {
+				setLoggedIn(false);
+				localStorage.removeItem('data');
+				localStorage.setItem('dataSaved', JSON.stringify({ checkbox: false, searchWord: '', movies: dataSavedMovies.movies }))
+				history.push('/');
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
 	function registration(data) {
 		auth.regApi(data.name, data.email, data.password)
 			.then(res => {
@@ -153,8 +186,9 @@ function App() {
 					setErrorReg(false);
 				}
 			})
-			.catch(() => {
-				setErrorReg(true)
+			.catch((err) => {
+				setErrorReg(true);
+				console.log(err)
 			})
 	}
 
@@ -165,7 +199,6 @@ function App() {
 					setLoggedIn(true);
 					history.push('/movies')
 					setErrorReg(false);
-					localStorage.setItem('auth', 'ok');
 				}
 			})
 			.catch(() => {
@@ -181,6 +214,7 @@ function App() {
 			})
 			.catch((err) => {
 				console.log(err);
+				checkAuth(err);
 			})
 			.finally(() => {
 				setTimeout(() => setMessageUpdateProfile(false), 2000);
@@ -199,23 +233,23 @@ function App() {
 
 					<ProtectedRoute
 						path="/movies"
-						data={data}
+						dataMovies={dataMovies}
 						loggedIn={loggedIn}
 						isLoading={isLoading}
 						onSubmit={onSubmit}
-						errorMovies={errorMovies}
-						notFound={notFound}
 						handleLike={handleLike}
 						handleCheckbox={handleCheckbox}
 						component={Movies}
+						errorLike={errorLike}
 					/>
 
 					<ProtectedRoute
 						path="/saved-movies"
 						loggedIn={loggedIn}
 						deleteMovieFromSavedMovies={deleteMovieFromSavedMovies}
-						savedMovies={savedMovies}
-						setSavedMovies={setSavedMovies}
+						dataSavedMovies={dataSavedMovies}
+						handleCheckbox={handleCheckbox}
+						setDataSavedMovies={setDataSavedMovies}
 						component={SavedMovies}
 						onSubmit={onSubmit}
 					/>
