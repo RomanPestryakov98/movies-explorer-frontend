@@ -31,9 +31,7 @@ function App() {
 	const [dataMovies, setDataMovies] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
 
 	useEffect(() => {
-		if (!loggedIn) {
-			tokenCheck();
-		}
+		tokenCheck();
 		// eslint-disable-next-line
 	}, [loggedIn])
 
