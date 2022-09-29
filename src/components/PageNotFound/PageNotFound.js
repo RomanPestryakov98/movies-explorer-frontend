@@ -17,7 +17,7 @@ function PageNotFound() {
 			<p className="PageNotFound__text">
 				Страница не найдена
 			</p>
-			<button className="PageNotFound__button" onClick={back}>Назад</button>
+			<button type='button' className="PageNotFound__button" onClick={back}>Назад</button>
 		</div>
 	)
 }

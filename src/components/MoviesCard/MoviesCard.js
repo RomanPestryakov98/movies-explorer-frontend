@@ -1,4 +1,6 @@
 import './MoviesCard.css';
+import { validURL } from '../../utils/utils';
+import { useEffect } from 'react';
 
 function MoviesCard({ data, name, handleLike, setMovies, deleteMovieFromSavedMovies, errorLike }) {
 	function setDuration(duration) {
@@ -6,6 +8,13 @@ function MoviesCard({ data, name, handleLike, setMovies, deleteMovieFromSavedMov
 		const minutes = duration % 60;
 		return `${hours}ч ${minutes}м`;
 	}
+
+	useEffect(() => {
+		if (!validURL(data.trailerLink)) {
+			data.trailerLink = 'https://www.youtube.com/';
+		}
+		// eslint-disable-next-line
+	}, [])
 
 	function onHandleLike() {
 		handleLike(data, setMovies);
@@ -18,7 +27,7 @@ function MoviesCard({ data, name, handleLike, setMovies, deleteMovieFromSavedMov
 	return (
 		<article className='MoviesCard'>
 			<div className='MoviesCard__container'>
-				<a href={data.trailerLink} target="_blank" rel="noreferrer" className='MoviesCard__image-container'>
+				<a href={validURL(data.trailerLink) ? data.trailerLink : 'https://www.youtube.com/'} target="_blank" rel="noreferrer" className='MoviesCard__image-container'>
 					<img src={name === 'movies' ? `https://api.nomoreparties.co/${data.image.url}` : data.image} alt={data.nameRU} className='MoviesCard__image' />
 				</a>
 				<div className='MoviesCard__content'>

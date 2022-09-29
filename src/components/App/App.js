@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import './App.css';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -12,7 +12,6 @@ import Footer from '../Footer/Footer';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import * as auth from '../../utils/auth.js';
-import { useHistory } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import MainApi from '../../utils/MainApi';
 import MovieApi from '../../utils/MovieApi';
@@ -48,6 +47,7 @@ function App() {
 			.then(res => {
 				setCurrentUser({ name: res.name, email: res.email });
 				setLoggedIn(true);
+				localStorage.setItem('isAuth', true);
 			})
 			.catch(err => {
 				checkAuth(err);
@@ -167,7 +167,8 @@ function App() {
 			.then(() => {
 				setLoggedIn(false);
 				localStorage.removeItem('data');
-				localStorage.setItem('dataSaved', JSON.stringify({ checkbox: false, searchWord: '', movies: dataSavedMovies.movies }))
+				localStorage.removeItem('isAuth');
+				localStorage.setItem('dataSaved', JSON.stringify({ checkbox: false, searchWord: '', movies: dataSavedMovies.movies }));
 				history.push('/');
 			})
 			.catch(err => {

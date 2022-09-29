@@ -5,7 +5,7 @@ function ProtectedRoute({ component: Component, ...props }) {
 	return (
 		<Route>
 			{() =>
-				props.loggedIn ?
+				localStorage.getItem('isAuth') ?
 					<>
 						<Component {...props} />
 					</>
