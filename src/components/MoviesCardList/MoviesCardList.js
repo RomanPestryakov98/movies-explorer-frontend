@@ -4,20 +4,21 @@ import Preloader from '../Preloader/Preloader';
 import React, { useEffect, useState } from 'react';
 import { filterScreen } from '../../utils/utils';
 
-
 function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handleLike, deleteMovieFromSavedMovies, errorLike, data }) {
 	const [counterMovies, setCounterMovies] = useState(0);
 	const [sizeScreen, setSizeScreen] = useState(window.screen.width);
 
 	useEffect(() => {
-		function handleResize() {
-			setSizeScreen(window.screen.width);
-		}
-		window.addEventListener('resize', handleResize);
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		}
-	})
+		let timeOut = null;
+		const checkResize = () => {
+			clearTimeout(timeOut);
+			timeOut = setTimeout(() => {
+				setSizeScreen(window.screen.width);
+			}, 150);
+		};
+		window.addEventListener('resize', checkResize);
+		return () => window.removeEventListener('resize', checkResize);
+	}, [sizeScreen]);
 
 	function handleCounterMovies() {
 		setCounterMovies(counterMovies + 1);
