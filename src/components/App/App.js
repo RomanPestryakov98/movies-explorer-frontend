@@ -37,7 +37,7 @@ function App() {
 	function checkAuth(err) {
 		if (err.statusText === 'Unauthorized') {
 			setLoggedIn(false);
-			history.push('/')
+			history.push('/signin')
 			console.log('Пользователь не авторизован')
 		}
 	}

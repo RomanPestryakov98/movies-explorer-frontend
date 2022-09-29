@@ -6,8 +6,12 @@ import { isEmail } from 'validator';
 
 function Form({ onRegistration, onLogin, name, errorReg }) {
 	const { register, handleSubmit, formState: { errors, isValid } } = useForm({ mode: 'onChange' });
+	const clasNameButton = 'Form__submit';
+	const clasNameButtonValid = 'Form__submit Form__submit_valid';
 
-	function onSubmit(data) {
+	function onSubmit(data, e) {
+		e.target.querySelector('input[type=submit]').disabled = true;
+		e.target.querySelector('input[type=submit]').className = clasNameButton;
 		if (name === 'register') {
 			onRegistration(data);
 
@@ -53,7 +57,7 @@ function Form({ onRegistration, onLogin, name, errorReg }) {
 				</label>
 				<div className='Form__submit-container'>
 					{errorReg && <p className='Form__submit-error'>Произошла ошибка</p>}
-					<input type="submit" disabled={!isValid} className={`Form__submit ${isValid && 'Form__submit_valid'}`} value={name === 'register' ? 'Зарегистрироваться' : 'Войти'} />
+					<input type="submit" disabled={!isValid} className={`${clasNameButton} ${isValid && clasNameButtonValid}`} value={name === 'register' ? 'Зарегистрироваться' : 'Войти'} />
 					<p className='Form__question'>
 						{name === 'register' ? 'Уже зарегистрированы?' : 'Ещё не зарегистрированы?'}
 						{name === 'register'
