@@ -29,7 +29,6 @@ function MoviesCardList({ movies, isLoading, setMessageAfterSubmit, name, handle
 			<div className='container-movies-card'>
 				<div className='MoviesCardList__container'>
 					{(data?.searchWord && movies.length === 0) && <p className='MoviesCardList__not-found'>Ничего не найдено</p>}
-					{errorLike && <span className='MoviesCard__error-like'>Ничего не найдено</span>}
 					{isLoading ?
 						<Preloader />
 						:

@@ -24,7 +24,6 @@ function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorReg, setErrorReg] = useState(false);
 	const [messageUpdateProfile, setMessageUpdateProfile] = useState(false);
-	const [errorLike, setErrorLike] = useState(false);
 	const history = useHistory();
 	const [dataSavedMovies, setDataSavedMovies] = useState(localStorage.getItem('dataSaved') ? JSON.parse(localStorage.getItem('dataSaved')) : {});
 	const [dataMovies, setDataMovies] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
@@ -37,7 +36,7 @@ function App() {
 	function checkAuth(err) {
 		if (err.statusText === 'Unauthorized') {
 			setLoggedIn(false);
-			history.push('/signin')
+			history.push('/')
 			console.log('Пользователь не авторизован')
 		}
 	}
@@ -75,10 +74,10 @@ function App() {
 			}
 			else {
 				setIsLoading(true);
-				MovieApi.getDataMovies()
+				Promise.all([MovieApi.getDataMovies(), MainApi.getMovies()])
 					.then(res => {
 						localStorage.setItem('data', JSON.stringify({
-							searchWord: data.searchWord, checkbox: data.checkbox, movies: compareSavedWithMovies(res, dataSavedMovies?.movies)
+							searchWord: data.searchWord, checkbox: data.checkbox, movies: compareSavedWithMovies(res[0], res[1])
 						}))
 						setDataMovies(JSON.parse(localStorage.getItem('data')));
 					})
@@ -111,11 +110,7 @@ function App() {
 					setDataSavedMovies(JSON.parse(localStorage.getItem('dataSaved')));
 				})
 				.catch(err => {
-					setErrorLike(true);
 					checkAuth(err);
-				})
-				.finally(() => {
-					setTimeout(() => setErrorLike(false), 2000);
 				})
 		}
 		else {
@@ -166,9 +161,7 @@ function App() {
 		MainApi.signout()
 			.then(() => {
 				setLoggedIn(false);
-				localStorage.removeItem('data');
-				localStorage.removeItem('isAuth');
-				localStorage.setItem('dataSaved', JSON.stringify({ checkbox: false, searchWord: '', movies: dataSavedMovies.movies }));
+				localStorage.clear();
 				history.push('/');
 			})
 			.catch(err => {
@@ -239,7 +232,6 @@ function App() {
 						handleLike={handleLike}
 						handleCheckbox={handleCheckbox}
 						component={Movies}
-						errorLike={errorLike}
 					/>
 
 					<ProtectedRoute
