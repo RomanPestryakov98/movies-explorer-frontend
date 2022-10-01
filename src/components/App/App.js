@@ -24,9 +24,10 @@ function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorReg, setErrorReg] = useState(false);
 	const [messageUpdateProfile, setMessageUpdateProfile] = useState(false);
-	const history = useHistory();
 	const [dataSavedMovies, setDataSavedMovies] = useState(localStorage.getItem('dataSaved') ? JSON.parse(localStorage.getItem('dataSaved')) : {});
 	const [dataMovies, setDataMovies] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
+
+	const history = useHistory();
 
 	useEffect(() => {
 		tokenCheck();
@@ -151,9 +152,9 @@ function App() {
 	function handleBurger() {
 		setIsBuregerOpen(!isBuregerOpen);
 		if (!isBuregerOpen) {
-			document.querySelector('body').classList.add('lock');
+			document.querySelector('#root').classList.add('lock');
 		} else {
-			document.querySelector('body').classList.remove('lock');
+			document.querySelector('#root').classList.remove('lock');
 		}
 	}
 
