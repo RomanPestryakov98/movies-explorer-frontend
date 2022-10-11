@@ -198,6 +198,7 @@ function App() {
 					setLoggedIn(true);
 					history.push('/movies');
 					setErrorReg(false);
+					tokenCheck();
 				}
 			})
 			.catch(() => {
