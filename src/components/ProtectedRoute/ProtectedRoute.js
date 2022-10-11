@@ -2,10 +2,11 @@ import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 
 function ProtectedRoute({ component: Component, ...props }) {
+
 	return (
 		<Route>
 			{() =>
-				localStorage.getItem('isAuth') ?
+				props.loggedIn ?
 					<>
 						<Component {...props} />
 					</>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import './App.css';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -20,19 +20,21 @@ import { handleLikeLocalStorage, compareSavedWithMovies } from '../../utils/util
 function App() {
 	const [currentUser, setCurrentUser] = useState({});
 	const [isBuregerOpen, setIsBuregerOpen] = useState(false);
-	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('auth') ? true : false);
+	const [loggedIn, setLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorReg, setErrorReg] = useState(false);
 	const [messageUpdateProfile, setMessageUpdateProfile] = useState(false);
-	const [dataSavedMovies, setDataSavedMovies] = useState(localStorage.getItem('dataSaved') ? JSON.parse(localStorage.getItem('dataSaved')) : {});
-	const [dataMovies, setDataMovies] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {})
+	const [dataSavedMovies, setDataSavedMovies] = useState({});
+	const [dataMovies, setDataMovies] = useState({});
+	const [isSubmitRegister, setIsSubmitRegister] = useState(false);
 
 	const history = useHistory();
+	const location = useLocation();
 
 	useEffect(() => {
 		tokenCheck();
 		// eslint-disable-next-line
-	}, [loggedIn])
+	}, [])
 
 	function checkAuth(err) {
 		if (err.statusText === 'Unauthorized') {
@@ -47,7 +49,7 @@ function App() {
 			.then(res => {
 				setCurrentUser({ name: res.name, email: res.email });
 				setLoggedIn(true);
-				localStorage.setItem('isAuth', true);
+				history.push(location.pathname)
 			})
 			.catch(err => {
 				checkAuth(err);
@@ -163,6 +165,8 @@ function App() {
 			.then(() => {
 				setLoggedIn(false);
 				localStorage.clear();
+				setDataMovies({});
+				setDataSavedMovies({});
 				history.push('/');
 			})
 			.catch(err => {
@@ -171,17 +175,19 @@ function App() {
 	}
 
 	function registration(data) {
+		setIsSubmitRegister(true);
 		auth.regApi(data.name, data.email, data.password)
 			.then(res => {
 				if (res) {
-					setLoggedIn(true);
-					history.push('/movies')
-					setErrorReg(false);
+					login({ email: data.email, password: data.password });
 				}
 			})
 			.catch((err) => {
 				setErrorReg(true);
-				console.log(err)
+				console.log(err);
+			})
+			.finally(() => {
+				setIsSubmitRegister(false);
 			})
 	}
 
@@ -190,7 +196,7 @@ function App() {
 			.then(res => {
 				if (res) {
 					setLoggedIn(true);
-					history.push('/movies')
+					history.push('/movies');
 					setErrorReg(false);
 				}
 			})
@@ -260,7 +266,7 @@ function App() {
 							?
 							<Redirect to='/movies' />
 							:
-							<Register errorReg={errorReg} onRegistration={registration} />
+							<Register errorReg={errorReg} onRegistration={registration} isSubmitRegister={isSubmitRegister} />
 						}
 					</Route>
 

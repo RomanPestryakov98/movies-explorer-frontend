@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { isEmail } from 'validator';
 
-function Form({ onRegistration, onLogin, name, errorReg }) {
+function Form({ onRegistration, onLogin, name, errorReg, isSubmitRegister }) {
 	const { register, handleSubmit, formState: { errors, isValid } } = useForm({ mode: 'onChange' });
 	const clasNameButton = 'Form__submit';
 	const clasNameButtonValid = 'Form__submit Form__submit_valid';
 
-	function onSubmit(data, e) {
-		e.target.querySelector('input[type=submit]').disabled = true;
-		e.target.querySelector('input[type=submit]').className = clasNameButton;
+	function onSubmit(data) {
 		if (name === 'register') {
 			onRegistration(data);
 
@@ -57,7 +55,7 @@ function Form({ onRegistration, onLogin, name, errorReg }) {
 				</label>
 				<div className='Form__submit-container'>
 					{errorReg && <p className='Form__submit-error'>Произошла ошибка</p>}
-					<input type="submit" disabled={!isValid} className={`${clasNameButton} ${isValid && clasNameButtonValid}`} value={name === 'register' ? 'Зарегистрироваться' : 'Войти'} />
+					<input type="submit" disabled={(isValid && !isSubmitRegister) ? false : true} className={`${clasNameButton} ${(isValid && !isSubmitRegister) && clasNameButtonValid}`} value={name === 'register' ? 'Зарегистрироваться' : 'Войти'} />
 					<p className='Form__question'>
 						{name === 'register' ? 'Уже зарегистрированы?' : 'Ещё не зарегистрированы?'}
 						{name === 'register'

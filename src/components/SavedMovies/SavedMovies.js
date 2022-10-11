@@ -6,7 +6,7 @@ import { filter } from '../../utils/utils';
 
 function SavedMovies({ deleteMovieFromSavedMovies, setDataSavedMovies, dataSavedMovies, onSubmit, handleCheckbox, notFoundAfterSubmit }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const [movies, setMovies] = useState(dataSavedMovies.movies ? dataSavedMovies.movies : []);
+	const [movies, setMovies] = useState([]);
 
 	useEffect(() => {
 		if (!dataSavedMovies.movies) {
