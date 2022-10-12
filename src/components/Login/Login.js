@@ -1,9 +1,9 @@
 import './Login.css';
 import Form from '../Form/Form';
 
-function Login() {
+function Login({ onLogin, errorReg }) {
 	return (
-		<Form />
+		<Form name='login' onLogin={onLogin} errorReg={errorReg} />
 	)
 }
 export default Login;

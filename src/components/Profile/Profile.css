@@ -2,19 +2,12 @@
 	display: flex;
 	flex-direction: column;
 	margin: 0 auto;
-	max-width: 410px;
+	min-width: 410px;
 	height: 100vh;
 	justify-content: space-between;
 	box-sizing: border-box;
 	padding: 74px 0 70px;
 	box-sizing: border-box;
-}
-
-.Profile__data{
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
 }
 
 .Profile__title {
@@ -30,6 +23,7 @@
 	display: flex;
 	justify-content: space-between;
 	padding: 16px 0;
+	position: relative;
 }
 
 .Profile__label:first-of-type {
@@ -79,12 +73,91 @@
 	line-height: 16px;
 	color: #EE3465;
 	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+}
+
+.Profile__form {
+	display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+	padding: 74px 0 70px;
+}
+
+.Profile__buttons {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.Profile__input-error {
+	position: absolute;
+    top: -29px;
+    color: #EE3465;
+    right: 0px;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+}
+
+.Profile__input-error_type_bottom {
+	top: 43px;
+}
+
+.Profile__message-udpate {
+	position: absolute;
+    color: white;
+    margin: 0;
+    top: -161px;
+    width: 100%;
+    text-align: center;
+    padding: 50px 0;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+.Profile__submit {
+	width: 100%;
+	min-height: 45px;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 17px;
+	cursor: pointer;
+	transition: background-color 0.3s ease 0s;
+	background-color: transparent;
+    border: 1px solid white;
+    color: white;
+	opacity: .4;
+    pointer-events: none;
+}
+
+.Profile__submit_valid {
+	opacity: 1;
+	background-color: #4285F4;
+	pointer-events: all;
+	border: none;
+}
+
+.Profile__currentUser {
+	padding: 0;
+	margin: 0;
+	font-weight: 400;
+	font-size: 11px;
+	line-height: 13px;
+	background-color: transparent;
+	color: white;
+	text-align: end;
 }
 
 @media screen and (max-width: 480px) {
 	.Profile {
-		max-width: 260px;
+		min-width: 260px;
 		padding: 70px 30px;
+	}
+
+	.Profile__form {
+		min-width: 260px;
 	}
 
 	.Profile__redaction {

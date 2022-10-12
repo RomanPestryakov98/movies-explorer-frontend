@@ -2,11 +2,12 @@ import { Link, NavLink } from 'react-router-dom';
 import './Navigation.css';
 import Burger from '../Burger/Burger';
 
-function Navigation(props) {
+function Navigation({ isLoggedIn, onClickBurger }) {
 	return (
-		<div className='Navigation'>
+		<div className={`Navigation ${!isLoggedIn ? 'Navigation_non-authorized' : ''}`}>
 
-			{props.isAuth === 'non-auth' ?
+			{!isLoggedIn
+				?
 				<div className='Navigation__not-authorized'>
 					<Link className='Navigation__register' to="/signup">Регистрация</Link>
 					<Link className='Navigation__entry' to="/signin">Вход</Link>
@@ -27,7 +28,7 @@ function Navigation(props) {
 						</ul>
 						<Link className='Navigation__account' to="/profile">Аккаунт</Link>
 					</div>
-					<Burger onClickBurger={props.onClickBurger} />
+					<Burger onClickBurger={onClickBurger} />
 				</>
 			}
 

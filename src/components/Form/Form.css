@@ -6,6 +6,7 @@
 	margin: 0 auto;
 	box-sizing: border-box;
 	padding: 70px 0;
+	width: 100%;
 }
 
 .Form__title {
@@ -50,20 +51,38 @@
 .Form__submit {
 	width: 100%;
 	min-height: 45px;
-	background-color: #4285F4;
-	border: none;
-	color: white;
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 17px;
 	cursor: pointer;
 	transition: background-color 0.3s ease 0s;
+	background-color: transparent;
+    border: 1px solid white;
+    color: white;
+	opacity: .4;
+    pointer-events: none;
+}
+
+.Form__submit_valid {
+	opacity: 1;
+	background-color: #4285F4;
+	pointer-events: all;
+	border: none;
+}
+
+.Form__submit-error {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	color: rgba(238, 52, 101, 1);
 }
 
 .Form__submit-container {
 	display: flex;
     flex: 1 1 auto;
-    flex-direction: column-reverse;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .Form__label {
@@ -76,7 +95,39 @@
 
 .Form__input:focus {
 	border-bottom: 1px solid #FF6838;
-  }
+}
+
+.Form__question {
+	margin: 0;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	color: #8B8B8B;
+	margin-top: 16px;
+}
+
+.Form__link {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	color: #4285F4;
+	text-decoration: none;
+	margin-left: 6px;
+}
+
+.Form__input-error {
+	color: #FF6838;
+	font-size: 14px;
+    line-height: 17px;
+	display: block;
+	margin-top: 10px;
+}
+
+.Form__logo-link {
+	text-align: left;
+}
 
 @media screen and (max-width: 768px) {
 	.Form {
@@ -93,8 +144,8 @@
 		text-align: center;
 	}
 
-	.Form__logo {
-		margin: 0 auto;
+	.Form__logo-link {
+		text-align: center;
 	}
 
 }
