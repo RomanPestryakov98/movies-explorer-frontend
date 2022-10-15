@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { filter } from '../../utils/utils';
 
 function SavedMovies({ deleteMovieFromSavedMovies, setDataSavedMovies, dataSavedMovies, onSubmit, handleCheckbox, notFoundAfterSubmit }) {
-	const [isLoading, setIsLoading] = useState(false);
 	const [movies, setMovies] = useState([]);
 
 	useEffect(() => {
@@ -22,22 +21,16 @@ function SavedMovies({ deleteMovieFromSavedMovies, setDataSavedMovies, dataSaved
 		// eslint-disable-next-line
 	}, [dataSavedMovies])
 
-	function handleIsLoading(state) {
-		setIsLoading(state)
-	}
-
 	return (
 		<>
 			<SearchForm
 				name='saved-movies'
-				onSetLoading={handleIsLoading}
 				onSubmit={onSubmit}
 				data={dataSavedMovies}
 				handleCheckbox={handleCheckbox}
 			/>
 			<MoviesCardList
 				name='saved-movies'
-				isLoading={isLoading}
 				movies={movies}
 				deleteMovieFromSavedMovies={deleteMovieFromSavedMovies}
 				notFoundAfterSubmit={notFoundAfterSubmit}

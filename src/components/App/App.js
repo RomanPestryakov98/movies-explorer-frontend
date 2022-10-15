@@ -25,7 +25,7 @@ function App() {
 	const [errorReg, setErrorReg] = useState(false);
 	const [messageUpdateProfile, setMessageUpdateProfile] = useState(false);
 	const [dataSavedMovies, setDataSavedMovies] = useState({});
-	const [dataMovies, setDataMovies] = useState({});
+	const [dataMovies, setDataMovies] = useState(localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : {});
 	const [isSubmitRegister, setIsSubmitRegister] = useState(false);
 
 	const history = useHistory();
